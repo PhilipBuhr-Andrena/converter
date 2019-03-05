@@ -1,0 +1,5 @@
+rootProject.name = 'converter'
+include 'processor'
+include 'annotation'
+include 'example'
+
