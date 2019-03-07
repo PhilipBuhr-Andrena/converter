@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. andrena objects
+ */
+
 rootProject.name = 'converter'
 include 'processor'
 include 'annotation'

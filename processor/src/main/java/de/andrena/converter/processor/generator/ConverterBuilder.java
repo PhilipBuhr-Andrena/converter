@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. andrena objects
+ */
+
 package de.andrena.converter.processor.generator;
 
 import com.google.common.annotations.VisibleForTesting;

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. andrena objects
+ */
+
 package de.andrena.annotation;
 
 import java.lang.annotation.ElementType;

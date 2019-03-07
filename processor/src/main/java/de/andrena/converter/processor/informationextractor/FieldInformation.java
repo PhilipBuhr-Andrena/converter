@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. andrena objects
+ */
+
 package de.andrena.converter.processor.informationextractor;
 
 import javax.lang.model.type.TypeMirror;
@@ -22,7 +26,6 @@ public class FieldInformation {
         this.isPublic = isPublic;
         this.mapping = mapping;
     }
-
 
 
     public String getName() {

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. andrena objects
+ */
+
 package some.otherpackage;
 
 import de.andrena.annotation.ConversionSource;

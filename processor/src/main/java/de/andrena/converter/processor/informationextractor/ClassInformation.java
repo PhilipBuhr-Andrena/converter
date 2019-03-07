@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. andrena objects
+ */
+
 package de.andrena.converter.processor.informationextractor;
 
 import com.squareup.javapoet.ClassName;
@@ -26,7 +30,7 @@ public class ClassInformation {
         return className.simpleName();
     }
 
-    public String getPackageName() {
+    String getPackageName() {
         return this.className.packageName();
     }
 
@@ -38,7 +42,7 @@ public class ClassInformation {
         return fields;
     }
 
-    public boolean hasField(FieldInformation fieldInformation) {
+    boolean hasField(FieldInformation fieldInformation) {
         long count = this.fields.stream()
                 .filter(fieldInformation::hasSameMapping)
                 .count();
