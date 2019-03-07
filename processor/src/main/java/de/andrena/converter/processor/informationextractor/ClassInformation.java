@@ -30,16 +30,18 @@ public class ClassInformation {
         return className.simpleName();
     }
 
-    String getPackageName() {
-        return this.className.packageName();
-    }
-
     public void addField(FieldInformation field) {
         fields.add(field);
     }
 
     public List<FieldInformation> getFields() {
         return fields;
+    }
+
+    public Optional<FieldInformation> findField(FieldInformation toField) {
+        return this.fields.stream()
+                .filter(toField::hasSameMapping)
+                .findFirst();
     }
 
     boolean hasField(FieldInformation fieldInformation) {
@@ -49,9 +51,7 @@ public class ClassInformation {
         return count > 0;
     }
 
-    public Optional<FieldInformation> findField(FieldInformation toField) {
-        return this.fields.stream()
-                .filter(toField::hasSameMapping)
-                .findFirst();
+    String getPackageName() {
+        return this.className.packageName();
     }
 }
