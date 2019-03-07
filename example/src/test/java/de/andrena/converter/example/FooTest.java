@@ -1,6 +1,7 @@
 package de.andrena.converter.example;
 
 import org.junit.jupiter.api.Test;
+import some.otherpackage.FooDto2;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -60,7 +61,7 @@ class FooTest {
     /*@Test
     @Disabled
     void convertsNestedAnnotatedClasses() {
-        FooDtoWrapper fooDtoWrapper = new FooDtoWrapper(new FooDto(NAME));
+        FooDtoWrapper fooDtoWrapper = new FooDtoWrapper(new FooDto2(NAME));
 
         FooWrapper fooWrapper = FooWrapperConverter.createFooWrapper(fooDtoWrapper);
 
@@ -73,5 +74,15 @@ class FooTest {
         FooWithDateString fooWithDateString = DateFooConverter.createFooWithDateString(fooWithDate);
 
         assertThat(fooWithDateString.date).isEqualTo("2019-03-04");
+    }
+
+    @Test
+    void fooFromOtherPackage() {
+        FooDto2 fooDto2 = new FooDto2();
+        fooDto2.name = NAME;
+
+        Foo foo = FooConverter.createFoo(fooDto2);
+
+        assertThat(foo.name).isEqualTo(NAME);
     }
 }

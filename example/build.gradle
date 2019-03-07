@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id "net.ltgt.apt" version "0.21"
+    id "net.ltgt.apt-idea" version "0.21"
 }
 
 group 'de.andrena'
@@ -21,25 +23,25 @@ dependencies {
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.12.0'
 }
 
-compileJava {
-    options.compilerArgs << "-s"
-    options.compilerArgs << "$projectDir/generated/java"
-
-    doFirst {
-        // make sure that directory exists
-        file(new File(projectDir, "/generated/java")).mkdirs()
-    }
-}
-
-clean.doLast {
-    // clean-up directory when necessary
-    file(new File(projectDir, "/generated")).deleteDir()
-}
-
-sourceSets {
-    generated {
-        java {
-            srcDir "$projectDir/generated/java"
-        }
-    }
-}
+//compileJava {
+//    options.compilerArgs << "-s"
+//    options.compilerArgs << "$projectDir/generated/java"
+//
+//    doFirst {
+//        // make sure that directory exists
+//        file(new File(projectDir, "/generated/java")).mkdirs()
+//    }
+//}
+//
+//clean.doLast {
+//    // clean-up directory when necessary
+//    file(new File(projectDir, "/generated")).deleteDir()
+//}
+//
+//sourceSets {
+//    generated {
+//        java {
+//            srcDir "$projectDir/generated/java"
+//        }
+//    }
+//}

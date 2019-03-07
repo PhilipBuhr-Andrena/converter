@@ -9,7 +9,6 @@ import java.io.IOException;
 class JavaFileWrapper {
     void createJavaFile(String packageName, TypeSpec.Builder builder, Filer filer) throws IOException {
         JavaFile javaFile = JavaFile.builder(packageName, builder.build()).build();
-
         javaFile.writeTo(filer);
     }
 }
