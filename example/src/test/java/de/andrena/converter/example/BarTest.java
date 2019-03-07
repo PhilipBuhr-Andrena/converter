@@ -21,4 +21,34 @@ class BarTest {
         assertThat(bar.getAmount()).isEqualTo(5);
         assertThat(bar.getNumber()).isEqualTo(3.14);
     }
+
+
+    @Test
+    void ignoresFieldInSource() {
+        BarWithIgnoredField barWithIgnoredField = new BarWithIgnoredField();
+        barWithIgnoredField.setName(NAME);
+        barWithIgnoredField.setAmount(5);
+        barWithIgnoredField.setNumber(3.14);
+
+        Bar bar = BarConverter.createBar(barWithIgnoredField);
+
+        assertThat(bar.getName()).isNull();
+        assertThat(bar.getAmount()).isEqualTo(5);
+        assertThat(bar.getNumber()).isEqualTo(3.14);
+    }
+
+    @Test
+    void ignoresFieldInTarget() {
+        Bar bar = new Bar();
+        bar.setName(NAME);
+        bar.setAmount(5);
+        bar.setNumber(3.14);
+
+        BarWithIgnoredField barWithIgnoredField = BarConverter.createBarWithIgnoredField(bar);
+
+        assertThat(barWithIgnoredField.getName()).isNull();
+        assertThat(barWithIgnoredField.getAmount()).isEqualTo(5);
+        assertThat(barWithIgnoredField.getNumber()).isEqualTo(3.14);
+
+    }
 }

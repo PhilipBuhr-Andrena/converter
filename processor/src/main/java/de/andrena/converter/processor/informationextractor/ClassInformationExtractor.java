@@ -1,5 +1,8 @@
 package de.andrena.converter.processor.informationextractor;
 
+import de.andrena.annotation.Ignore;
+
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 class ClassInformationExtractor {
@@ -21,9 +24,14 @@ class ClassInformationExtractor {
         ClassInformation result = new ClassInformation(classNameProvider.getClassName(element));
         element.getEnclosedElements().stream()
                 .filter(child -> child.getKind().isField())
+                .filter(this::hasNoIgnoreAnnotation)
                 .map(field -> fieldInformationExtractor.extract(field))
                 .forEach(result::addField);
         return result;
+    }
+
+    private boolean hasNoIgnoreAnnotation(Element field) {
+        return field.getAnnotation(Ignore.class) == null;
     }
 
 }
