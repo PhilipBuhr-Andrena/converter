@@ -20,11 +20,12 @@ class ConversionInformationExtractorTest {
     private ConversionInformationExtractor extractor;
     private ClassInformationExtractor classInformationExtractor;
     private TypeElement source2;
+    private Converter converterAnnotation;
 
     @BeforeEach
     void setUp() {
         model = mock(TypeElement.class);
-        Converter converterAnnotation = mock(Converter.class);
+        converterAnnotation = mock(Converter.class);
         when(converterAnnotation.name()).thenReturn(NAME);
         when(model.getAnnotation(Converter.class)).thenReturn(converterAnnotation);
         source = mock(TypeElement.class);
@@ -35,17 +36,18 @@ class ConversionInformationExtractorTest {
     }
 
     @Test
-    void extractsName() {
-        ConversionInformation result = extractor.extract(model, Set.of(source));
+    void usesGivenName() {
+        ConversionInformation result = extractor.extract(model, Set.of(source), NAME);
 
         assertThat(result.getName()).isEqualTo(NAME);
     }
+
 
     @Test
     void extractsClassInformationOfModel() {
         ClassInformation expected = new ClassInformation();
         when(classInformationExtractor.extract(model)).thenReturn(expected);
-        ConversionInformation result = extractor.extract(model, Set.of(source));
+        ConversionInformation result = extractor.extract(model, Set.of(source), NAME);
 
         assertThat(result.getModel()).isEqualTo(expected);
     }
@@ -55,7 +57,7 @@ class ConversionInformationExtractorTest {
         ClassInformation expected = new ClassInformation();
         when(classInformationExtractor.extract(any())).thenReturn(expected);
 
-        ConversionInformation result = extractor.extract(model, Set.of(source, source2));
+        ConversionInformation result = extractor.extract(model, Set.of(source, source2), NAME);
 
         assertThat(result.getSources()).hasSize(2);
         assertThat(result.getSources()).contains(expected);

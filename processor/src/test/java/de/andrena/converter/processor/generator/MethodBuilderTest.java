@@ -2,16 +2,16 @@ package de.andrena.converter.processor.generator;
 
 import com.squareup.javapoet.ClassName;
 import de.andrena.converter.processor.informationextractor.ClassInformation;
+import de.andrena.converter.processor.informationextractor.ConversionMethods;
 import de.andrena.converter.processor.informationextractor.FieldInformation;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.Collections;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-@Disabled
 class MethodBuilderTest {
 
     private static final String NAME = "name";
@@ -23,6 +23,7 @@ class MethodBuilderTest {
     private FieldInformation fromField;
     private FieldInformation toField;
     private FieldInformation additionalField;
+    private ConversionMethods conversionMethods;
 
     @BeforeEach
     void setUp() {
@@ -30,24 +31,36 @@ class MethodBuilderTest {
 
         to = mock(ClassInformation.class);
 
-        toField = new FieldInformation(NAME, true);
-        when(to.getFields()).thenAnswer(invocation -> Set.of(toField));
+        toField = new FieldInformation(NAME, null, true);
+        when(to.getFields()).thenAnswer(invocation -> Collections.singletonList(toField));
         when(to.getSimpleName()).thenReturn(CLASS_NAME);
+        when(to.getClassName()).thenReturn(ClassName.get(TestClass.class));
 
-        from = new ClassInformation();
-        fromField = new FieldInformation(NAME, true);
-        from.addField(fromField);
+        from = mock(ClassInformation.class);
+        fromField = new FieldInformation(NAME, null, true);
+        when(from.getFields()).thenAnswer(invocation -> Collections.singletonList(fromField));
+        when(from.getClassName()).thenReturn(ClassName.get(TestClassDto.class));
+        when(from.findField(toField)).thenReturn(Optional.of(fromField));
 
-        additionalField = new FieldInformation("otherName", true);
+
+        additionalField = new FieldInformation("otherName", null, true);
         from.addField(additionalField);
 
         methodBuilder = new MethodBuilder(statementBuilder);
+        conversionMethods = mock(ConversionMethods.class);
     }
 
     @Test
     void findsCorrespondingFields() {
-        methodBuilder.generateConversionMethod(to, from);
-        verify(statementBuilder).mapField(toField, fromField);
-        verify(statementBuilder, never()).mapField(toField, additionalField);
+        methodBuilder.generateConversionMethod(to, from, conversionMethods);
+        verify(statementBuilder).mapField(toField, fromField, conversionMethods);
+        verify(statementBuilder, never()).mapField(toField, additionalField, conversionMethods);
     }
+
+    private static class TestClass {
+    }
+
+    private static class TestClassDto {
+    }
+
 }

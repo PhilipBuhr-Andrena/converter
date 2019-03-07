@@ -2,16 +2,17 @@ package de.andrena.converter.processor.informationextractor;
 
 import de.andrena.annotation.ConversionSource;
 import de.andrena.annotation.Converter;
-import de.andrena.converter.processor.informationextractor.AnnotatedClassExtractor;
-import de.andrena.converter.processor.informationextractor.ConversionInformationExtractor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
+import java.util.Collections;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 class AnnotatedClassExtractorTest {
@@ -23,6 +24,7 @@ class AnnotatedClassExtractorTest {
     private TypeElement elementWithConversionSourceAnnotation;
     private TypeElement elementWithDifferentName;
     private ConversionInformationExtractor conversionInformationExtractor;
+    private Converter converterAnnotation;
 
     @BeforeEach
     void setUp() {
@@ -49,13 +51,41 @@ class AnnotatedClassExtractorTest {
                 .thenAnswer(invocation -> Set.of(elementWithConversionSourceAnnotation, elementWithDifferentName));
         extractor.extract(roundEnvironment);
 
-        verify(conversionInformationExtractor).extract(elementWithConverterAnnotation, Set.of(elementWithConversionSourceAnnotation));
+        verify(conversionInformationExtractor).extract(elementWithConverterAnnotation, Set.of(elementWithConversionSourceAnnotation), NAME);
+    }
+
+    @Test
+    void usesElementNameWhenConverterHasEmptyName() {
+        when(converterAnnotation.name()).thenReturn("");
+
+        when(roundEnvironment.getElementsAnnotatedWith(Converter.class))
+                .thenAnswer(invocation -> Set.of(elementWithConverterAnnotation));
+        when(roundEnvironment.getElementsAnnotatedWith(ConversionSource.class))
+                .thenAnswer(invocation -> Set.of(elementWithConversionSourceAnnotation, elementWithDifferentName));
+
+        extractor.extract(roundEnvironment);
+
+        verify(conversionInformationExtractor).extract(elementWithConverterAnnotation, Set.of(elementWithConversionSourceAnnotation), NAME);
+    }
+
+    @Test
+    void throwRuntimeExceptionIfMappingNameIsDuplicate() {
+        TypeElement converterElementWithSameMappingName = mock(TypeElement.class);
+        when(converterElementWithSameMappingName.getKind()).thenReturn(ElementKind.CLASS);
+        when(converterElementWithSameMappingName.getAnnotation(Converter.class)).thenReturn(converterAnnotation);
+
+        when(roundEnvironment.getElementsAnnotatedWith(Converter.class)).thenAnswer(invocation -> Set.of(elementWithConverterAnnotation, converterElementWithSameMappingName));
+        when(roundEnvironment.getElementsAnnotatedWith(ConversionSource.class)).thenAnswer(invocation -> Collections.emptySet());
+
+        assertThatThrownBy(() -> extractor.extract(roundEnvironment))
+                .isInstanceOf(DuplicateMappingNameException.class)
+                .hasMessage("Duplicate Mapping Name found: name");
     }
 
     private void setUpElements() {
         elementWithConverterAnnotation = mock(TypeElement.class);
         when(elementWithConverterAnnotation.getKind()).thenReturn(ElementKind.CLASS);
-        Converter converterAnnotation = mock(Converter.class);
+        converterAnnotation = mock(Converter.class);
         when(converterAnnotation.name()).thenReturn(NAME);
         when(elementWithConverterAnnotation.getAnnotation(Converter.class)).thenReturn(converterAnnotation);
 
@@ -70,5 +100,9 @@ class AnnotatedClassExtractorTest {
         ConversionSource conversionSourceAnnotationWithDifferentName = mock(ConversionSource.class);
         when(conversionSourceAnnotationWithDifferentName.name()).thenReturn("otherName");
         when(elementWithDifferentName.getAnnotation(ConversionSource.class)).thenReturn(conversionSourceAnnotationWithDifferentName);
+
+        Name name = mock(Name.class);
+        when(name.toString()).thenReturn(NAME);
+        when(elementWithConverterAnnotation.getSimpleName()).thenReturn(name);
     }
 }

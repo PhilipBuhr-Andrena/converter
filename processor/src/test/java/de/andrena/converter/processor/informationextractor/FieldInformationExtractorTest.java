@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Name;
+import javax.lang.model.type.TypeMirror;
 import java.util.Set;
 
 import static javax.lang.model.element.Modifier.*;
@@ -100,5 +101,15 @@ class FieldInformationExtractorTest {
         FieldInformation result = extractor.extract(annotatedField);
 
         assertThat(result.getMapping()).isEqualTo("mappingName");
+    }
+
+    @Test
+    void setsType() {
+        TypeMirror type = mock(TypeMirror.class);
+        when(field.asType()).thenReturn(type);
+
+        FieldInformation result = extractor.extract(field);
+
+        assertThat(result.getType()).isEqualTo(type);
     }
 }

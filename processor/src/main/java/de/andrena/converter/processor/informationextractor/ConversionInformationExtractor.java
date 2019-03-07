@@ -1,7 +1,5 @@
 package de.andrena.converter.processor.informationextractor;
 
-import de.andrena.annotation.Converter;
-
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
@@ -18,9 +16,9 @@ class ConversionInformationExtractor {
         this.classInformationExtractor = classInformationExtractor;
     }
 
-    ConversionInformation extract(TypeElement model, Set<TypeElement> sources) {
+    ConversionInformation extract(TypeElement model, Set<TypeElement> sources, String name) {
         ConversionInformation result = new ConversionInformation();
-        result.setName(model.getAnnotation(Converter.class).name());
+        result.setName(name);
         result.setModel(classInformationExtractor.extract(model));
         sources.forEach(element -> {
             ClassInformation source = classInformationExtractor.extract(element);
@@ -28,4 +26,5 @@ class ConversionInformationExtractor {
         });
         return result;
     }
+
 }

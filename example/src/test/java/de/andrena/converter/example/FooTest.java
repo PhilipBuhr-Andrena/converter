@@ -3,6 +3,7 @@ package de.andrena.converter.example;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,5 +55,23 @@ class FooTest {
 
         Foo foo = FooConverter.createFoo(fooWithDifferentFieldName);
         assertThat(foo.name).isEqualTo(NAME);
+    }
+
+    /*@Test
+    @Disabled
+    void convertsNestedAnnotatedClasses() {
+        FooDtoWrapper fooDtoWrapper = new FooDtoWrapper(new FooDto(NAME));
+
+        FooWrapper fooWrapper = FooWrapperConverter.createFooWrapper(fooDtoWrapper);
+
+        assertThat(fooWrapper.foo.name).isEqualTo(NAME);
+    }*/
+
+    @Test
+    void usesConversionAdaptersToConvertField() {
+        FooWithDate fooWithDate = new FooWithDate(LocalDate.of(2019, 3, 4));
+        FooWithDateString fooWithDateString = DateFooConverter.createFooWithDateString(fooWithDate);
+
+        assertThat(fooWithDateString.date).isEqualTo("2019-03-04");
     }
 }

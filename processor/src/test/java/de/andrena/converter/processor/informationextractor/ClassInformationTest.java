@@ -20,8 +20,8 @@ class ClassInformationTest {
 
     @Test
     void hasFieldReturnsTrueIfClassHasField() {
-        FieldInformation field = new FieldInformation(FIELD, true);
-        FieldInformation wanted = new FieldInformation(FIELD, true);
+        FieldInformation field = new FieldInformation(FIELD, null, true);
+        FieldInformation wanted = new FieldInformation(FIELD, null, true);
 
         classInformation.addField(field);
 
@@ -30,9 +30,9 @@ class ClassInformationTest {
 
     @Test
     void hasFieldReturnsFalseIfClassDoesNotHaveField() {
-        FieldInformation field = new FieldInformation("otherName", true);
+        FieldInformation field = new FieldInformation("otherName", null, true);
 
-        FieldInformation wanted = new FieldInformation(FIELD, true);
+        FieldInformation wanted = new FieldInformation(FIELD, null, true);
 
         classInformation.addField(field);
 
@@ -41,8 +41,8 @@ class ClassInformationTest {
 
     @Test
     void findFieldByName() {
-        FieldInformation field = new FieldInformation(FIELD, true);
-        FieldInformation wanted = new FieldInformation(FIELD, true);
+        FieldInformation field = new FieldInformation(FIELD, null, true);
+        FieldInformation wanted = new FieldInformation(FIELD, null, true);
 
         classInformation.addField(field);
 

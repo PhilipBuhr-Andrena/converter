@@ -1,19 +1,24 @@
 package de.andrena.converter.processor.informationextractor;
 
+import javax.lang.model.type.TypeMirror;
+
 public class FieldInformation {
 
     private String name;
+    private TypeMirror type;
     private boolean isPublic;
     private String mapping;
 
-    public FieldInformation(String name, boolean isPublic) {
+    public FieldInformation(String name, TypeMirror type, boolean isPublic) {
         this.name = name;
+        this.type = type;
         this.isPublic = isPublic;
         this.mapping = name;
     }
 
-    public FieldInformation(String name, boolean isPublic, String mapping) {
+    public FieldInformation(String name, TypeMirror type, boolean isPublic, String mapping) {
         this.name = name;
+        this.type = type;
         this.isPublic = isPublic;
         this.mapping = mapping;
     }
@@ -53,5 +58,13 @@ public class FieldInformation {
 
     String getMapping() {
         return mapping;
+    }
+
+    public TypeMirror getType() {
+        return type;
+    }
+
+    public boolean hasDifferentType(FieldInformation fromField) {
+        return !type.equals(fromField.getType());
     }
 }

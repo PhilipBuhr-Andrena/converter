@@ -2,7 +2,10 @@ package de.andrena.converter.processor.informationextractor;
 
 import org.junit.jupiter.api.Test;
 
+import javax.lang.model.type.TypeMirror;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 class FieldInformationTest {
 
@@ -12,16 +15,16 @@ class FieldInformationTest {
 
     @Test
     void haveSameMappingIfFieldsHaveSameName() {
-        FieldInformation wanted = new FieldInformation(NAME, true);
-        FieldInformation other = new FieldInformation(NAME, true);
+        FieldInformation wanted = new FieldInformation(NAME, null, true);
+        FieldInformation other = new FieldInformation(NAME, null, true);
 
         assertThat(wanted.hasSameMapping(other)).isTrue();
     }
 
     @Test
     void dontHaveSameMappingIfNamesAreDiffernt() {
-        FieldInformation first = new FieldInformation(NAME, true);
-        FieldInformation second = new FieldInformation(OTHER_NAME, true);
+        FieldInformation first = new FieldInformation(NAME, null, true);
+        FieldInformation second = new FieldInformation(OTHER_NAME, null, true);
 
         assertThat(first.hasSameMapping(second)).isFalse();
         assertThat(second.hasSameMapping(first)).isFalse();
@@ -29,8 +32,8 @@ class FieldInformationTest {
 
     @Test
     void haveSameMappingIfSameMapping() {
-        FieldInformation first = new FieldInformation(NAME, true, MAPPING);
-        FieldInformation second = new FieldInformation(OTHER_NAME, true, MAPPING);
+        FieldInformation first = new FieldInformation(NAME, null, true, MAPPING);
+        FieldInformation second = new FieldInformation(OTHER_NAME, null, true, MAPPING);
 
         assertThat(first.hasSameMapping(second)).isTrue();
         assertThat(second.hasSameMapping(first)).isTrue();
@@ -38,15 +41,15 @@ class FieldInformationTest {
 
     @Test
     void haveSameMappingIsReflexive() {
-        FieldInformation fieldInformation = new FieldInformation(NAME, true, MAPPING);
+        FieldInformation fieldInformation = new FieldInformation(NAME, null, true, MAPPING);
 
         assertThat(fieldInformation.hasSameMapping(fieldInformation)).isTrue();
     }
 
     @Test
     void haveSameMappingIfMappingOfOneEqualsFieldNameOfOther() {
-        FieldInformation first = new FieldInformation(NAME, true);
-        FieldInformation second = new FieldInformation(OTHER_NAME, true, NAME);
+        FieldInformation first = new FieldInformation(NAME, null, true);
+        FieldInformation second = new FieldInformation(OTHER_NAME, null, true, NAME);
 
         assertThat(first.hasSameMapping(second)).isTrue();
         assertThat(second.hasSameMapping(first)).isTrue();
@@ -54,7 +57,7 @@ class FieldInformationTest {
 
     @Test
     void getterAndSetterIsFieldNameIfPublic() {
-        FieldInformation fieldInformation = new FieldInformation(NAME, true);
+        FieldInformation fieldInformation = new FieldInformation(NAME, null, true);
 
         assertThat(fieldInformation.findGetter()).isEqualTo(NAME);
         assertThat(fieldInformation.findSetter()).isEqualTo(NAME);
@@ -62,9 +65,29 @@ class FieldInformationTest {
 
     @Test
     void getterAndSetterAreMethodNamesIfNonPublic() {
-        FieldInformation fieldInformation = new FieldInformation(NAME, false);
+        FieldInformation fieldInformation = new FieldInformation(NAME, null, false);
 
         assertThat(fieldInformation.findSetter()).isEqualTo("setName");
         assertThat(fieldInformation.findGetter()).isEqualTo("getName()");
+    }
+
+    @Test
+    void haveDifferentType() {
+        FieldInformation first = new FieldInformation(NAME, mock(TypeMirror.class), true);
+        FieldInformation second = new FieldInformation(NAME, mock(TypeMirror.class), true);
+
+        assertThat(first.hasDifferentType(second)).isTrue();
+        assertThat(second.hasDifferentType(first)).isTrue();
+    }
+
+    @Test
+    void haveSameType() {
+        TypeMirror type = mock(TypeMirror.class);
+        FieldInformation first = new FieldInformation(NAME, type, true);
+        FieldInformation second = new FieldInformation(NAME, type, true);
+
+        assertThat(first.hasDifferentType(second)).isFalse();
+        assertThat(second.hasDifferentType(first)).isFalse();
+
     }
 }
