@@ -89,8 +89,8 @@ __Important:__ \
 The code generation is based on the following assumptions:
 - Both classes have an empty default Constructor
 - Fields are either public or have an getter and setter following standard Java conventions `public void setName(String name)` and `public String getName()`
-- Fields have the same Name or a `@Mapping` Annotation (see section Mapping)
-- Fields have the same type or and `@ConversionAdapter` exists (see section ConversionAdapters)
+- Fields have the same Name or a `@Mapping` Annotation (see section [Mapping](#mapping))
+- Fields have the same type or and `@ConversionAdapter` exists (see section [ConversionAdapters](#conversionadapters))
 - Fields that have no corresponding field in the target class are ignored.
 
 ### Converter Name
