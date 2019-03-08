@@ -15,3 +15,15 @@ repositories {
     mavenCentral()
 }
 
+subprojects {
+    tasks.withType(Jar) {
+        destinationDir = file("$rootDir/artifacts/")
+    }
+}
+
+task buildArtifacts {
+    dependsOn ':processor:shadowJar'
+    doLast {
+        println "Done"
+    }
+}
