@@ -5,24 +5,24 @@ like models for our business logic, DTOs for communication with other services a
 This forces us to write a lot of trivial conversion logic. With this Converter, all you have to do is to annotate your classes, 
 and the annotation processor generates Converters for you.    
 
-##Getting Started:
+## Getting Started:
 
-###With gradle:
+### With gradle:
 apt-plugin (+apt idea/eclipse)\
 implementation annotations\
 annotationProcessor processor
 
-###with maven:
+### With maven:
 maven-compile plugin -> annotation processor
 
-##Usage:
+## Usage:
 
 The main functionality is covered by two annotations `@Converter` and `@ConversionSource`. The reason for two different Annotations is, 
 that the business model will be annotated with `@Converter` and all the corresponding DTOs with `@ConversionSource`. 
 A converter will be generated, which can convert DTOs to the Model and the other way around, but not from one DTO to another. 
 This is supposed to encourage Hexagonal Architecture.   
 
-###Basic
+### Basic
 ```java
 @Converter
 public class Foo {
@@ -51,20 +51,20 @@ The code generation is based on the following assumptions:
 - Fields have the same type or and `@ConversionAdapter` exists (see section ConversionAdapters)
 - Fields that have no corresponding field in the target class are ignored.
 
-###Converter Name
+### Converter Name
 
 The `@Converter` can be given a optional name value `@Converter(name= "Foo")`. By default the name is the simple Class name. 
 This name is used for mapping and for the name of the converter. `@Converter(name = "CustomName")` will result in `CustomNameConverter` and 
 the ConversionSources have to have the same name `@ConversionSource(name= "CustomName")`.
 
-###ConversionSource
+### ConversionSource
 
 There can be multiple classes annotated with `@ConversionSource` for every Model with `@Converter`. The converter class will have two 
 methods for each ConversionSource, one converting the Source to the Model, and one converting the Model to the Source.\
 The name value of the `@ConversionSource` has to match the name value of the `@Converter`, if specified. 
 If the `@Converter` name value has been omitted, it has to match the Model class name.
 
-###Mapping
+### Mapping
 
 Often the field names don't match. In this case use the `@Mapping` Annotation.
 ```java
@@ -82,7 +82,7 @@ public class FooDto {
 
 The value of the `@Mapping` Annotation has to match the field name or both fields have `@Mapping` Annotations with matching values.
 
-###ConversionAdapters
+### ConversionAdapters
 
 If the types of the field are not the same, one can use `@ConversionAdapter` methods. For example if you have:
 ```java
@@ -115,3 +115,6 @@ __Important__
 - The name is irrelevant, the correct method is identified by its signature
 - As of now, each signature may only exist once. Otherwise a DuplicateMappingNameException is raised during Compile.
 
+## Feedback
+
+Thank you for using the Converter. Please leave feedback at https://github.com/PhilipBuhr-Andrena/converter
