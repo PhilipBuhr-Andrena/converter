@@ -7,11 +7,53 @@ and the annotation processor generates Converters for you.
 
 ## Getting Started:
 
-### With gradle:
-apt-plugin (+apt idea/eclipse)\
-implementation annotations\
-annotationProcessor processor
+The Converter is not yet hosted on Maven Central. Therefore you need to build the artifacts `annotation-<version>.jar`
+and `processor-<version>-all.jar` yourself.\
+In a commandline: 
+```
+$ git clone https://github.com/PhilipBuhr-Andrena/converter.git
 
+$ cd converter
+
+$ ./gradlew buildArtifacts
+```
+
+The jar files are now in the `artifacts/` directory. You can copy them to `yourProject/libs/`. 
+
+### With gradle:
+Add the jar files to your repositories:
+```
+// in your build.gradle
+
+repositories {
+    // other repositories
+    flatDir {
+        dirs 'libs' // or where else you put the jars
+    }
+}
+```
+If your gradle (wrapper) is below version 5.x.x, I highly recommend the `net.ltgt.apt` plugin with the plugin for your IDE. 
+The IDE specific plugin is always helpful, even if you have the newest gradle version, since it marks the generated folders as source folders.
+
+```
+// in your build.gradle
+
+plugins {
+  id "net.ltgt.apt" version "0.21"
+  id "net.ltgt.apt-idea" version "0.21" // if you use Intellij
+  id "net.ltgt.apt-eclipse" version "0.21" // if you use Eclipse
+}
+```
+Now you can add the dependencies:
+```
+// in your build.gradle
+
+dependencies {
+    implementation name:'annotation-0.1.0-SNAPSHOT'
+    annotationProcessor name: 'processor-0.1.0-SNAPSHOT-all'
+    // other dependencies
+}
+```
 ### With maven:
 maven-compile plugin -> annotation processor
 
@@ -34,7 +76,7 @@ public class FooDto {
     public String name;
 }
 ```
-
+After adding the annotations you should run a build to trigger the code generation.
 The Converter can be used as follows:
 ```
 FooDto fooDto = new FooDto();
@@ -114,6 +156,11 @@ __Important__
 - They can be located anywhere, recommended is a ConfigurationClass
 - The name is irrelevant, the correct method is identified by its signature
 - As of now, each signature may only exist once. Otherwise a DuplicateMappingNameException is raised during Compile.
+
+### Ignore
+
+Fields, which have no counterpart in the corresponding Class are ignored. But you can also add an `@Ignore` annotation to fields 
+in order to prevent them from being mapped if a corresponding field does exist.
 
 ## Feedback
 
