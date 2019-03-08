@@ -27,3 +27,9 @@ task buildArtifacts {
         println "Done"
     }
 }
+
+clean {
+    doLast {
+        file(new File(projectDir, "/artifacts/")).deleteDir()
+    }
+}
