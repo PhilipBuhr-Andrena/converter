@@ -6,8 +6,8 @@ plugins {
     id 'java'
 }
 
-group 'de.andrena'
-version '1.0-SNAPSHOT'
+group gradle.groupId
+version gradle.version
 
 sourceCompatibility = 1.8
 

@@ -77,7 +77,7 @@ class FooTest {
         FooWithDate fooWithDate = new FooWithDate(LocalDate.of(2019, 3, 4));
         FooWithDateString fooWithDateString = DateFooConverter.createFooWithDateString(fooWithDate);
 
-        assertThat(fooWithDateString.date).isEqualTo("2019-03-04");
+        assertThat(fooWithDateString.date).isEqualTo("04/03/2019");
     }
 
     @Test

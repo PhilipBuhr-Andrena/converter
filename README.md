@@ -1,7 +1,7 @@
 #Converter
 
 We often use similar Objects in different layers of our applications, 
-like models for our business logic, DTOs for Interfaces and JPA Entities for Databases.
+like models for our business logic, DTOs for communication with other services and JPA Entities for Databases.
 This forces us to write a lot of trivial conversion logic. With this Converter, all you have to do is to annotate your classes, 
 and the annotation processor generates Converters for you.    
 
@@ -43,12 +43,13 @@ Foo foo = FooConverter.createFoo(fooDto);
 System.out.println("Foo name: " + foo.name);    // >> FooName: someName
 ```
 
-**Important:** \
+__Important:__ \
 The code generation is based on the following assumptions:
-* Both classes have an empty default Constructor
-* Fields are either public or have an getter and setter following standard Java conventions `public void setName(String name)` and `public String getName()`
-* Fields have the same Name or a `@Mapping` Annotation (see section Mapping)
-* Fields have the same type or and `@ConversionAdapter` exists (see section ConversionAdapters)
+- Both classes have an empty default Constructor
+- Fields are either public or have an getter and setter following standard Java conventions `public void setName(String name)` and `public String getName()`
+- Fields have the same Name or a `@Mapping` Annotation (see section Mapping)
+- Fields have the same type or and `@ConversionAdapter` exists (see section ConversionAdapters)
+- Fields that have no corresponding field in the target class are ignored.
 
 ###Converter Name
 
@@ -64,6 +65,7 @@ The name value of the `@ConversionSource` has to match the name value of the `@C
 If the `@Converter` name value has been omitted, it has to match the Model class name.
 
 ###Mapping
+
 Often the field names don't match. In this case use the `@Mapping` Annotation.
 ```java
 @Converter
@@ -76,4 +78,40 @@ public class FooDto {
     @Mapping("name")
     public String otherName;
 }
+```
+
+The value of the `@Mapping` Annotation has to match the field name or both fields have `@Mapping` Annotations with matching values.
+
+###ConversionAdapters
+
+If the types of the field are not the same, one can use `@ConversionAdapter` methods. For example if you have:
+```java
+@Converter
+public class Foo {
+    public LocalDate date;
+} 
+
+@ConversionSource
+public class FooDto {
+    public String date;
+}
+```
+This would result in an ConversionAdapterNotFoundException during Compile. You need:
+```
+@ConversionAdapter
+public static String myLocalDateConverterMethod(LocalDate date) {
+    return date.toString();
+}
+
+@ConversionAdapter
+public static LocalDate myStringToLocalDateConverterMethod(String date) {
+    return LocalDate.parse(date);  //errorhadling omitted
+}
+```
+
+__Important__
+- The methods need to be `public` and `static`
+- They can be located anywhere, recommended is a ConfigurationClass
+- The name is irrelevant, the correct method is identified by its signature
+- As of now, each signature may only exist once. Otherwise a DuplicateMappingNameException is raised during Compile.
 

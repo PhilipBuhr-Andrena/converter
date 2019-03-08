@@ -7,6 +7,7 @@ package de.andrena.converter.example;
 import de.andrena.annotation.ConversionAdapter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @SuppressWarnings("WeakerAccess")
 public final class ConversionAdapters {
@@ -16,11 +17,11 @@ public final class ConversionAdapters {
 
     @ConversionAdapter
     public static String convertDate(LocalDate date) {
-        return date.toString();
+        return date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     @ConversionAdapter
     public static LocalDate covertToDate(String date) {
-        return LocalDate.parse(date);
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 }
