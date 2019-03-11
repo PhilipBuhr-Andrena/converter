@@ -66,52 +66,44 @@ to your `libs/` directory:
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-install-plugin</artifactId>
             <version>2.5.1</version>
-            <configuration>
-                <groupId>de.andrena.converter</groupId>
-                <artifactId>annotation</artifactId>
-                <version>0.1.0-SNAPSHOT</version>
-                <packaging>jar</packaging>
-                <file>${basedir}/libs/annotation-0.1.0-SNAPSHOT.jar</file>  <!-- path to where you put the jars -->
-                <generatePom>true</generatePom>
-            </configuration>
             <executions>
                 <execution>
-                    <id>install-jar-lib</id>
+                    <id>install-annotation</id>
                     <goals>
                         <goal>install-file</goal>
                     </goals>
                     <phase>validate</phase>
+                    <configuration>
+                        <groupId>de.andrena.converter</groupId>
+                        <artifactId>annotation</artifactId>
+                        <version>0.1.0-SNAPSHOT</version>
+                        <packaging>jar</packaging>
+                        <file>${basedir}/libs/annotation-0.1.0-SNAPSHOT.jar</file>  <!-- path to where you put the jars -->
+                        <generatePom>true</generatePom>
+                    </configuration>
                 </execution>
-            </executions>
-        </plugin>
-        
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-install-plugin</artifactId>
-            <version>2.5.1</version>
-            <configuration>
-                <groupId>de.andrena.converter</groupId>
-                <artifactId>processor</artifactId>
-                <version>0.1.0-SNAPSHOT</version>
-                <packaging>jar</packaging>
-                <file>${basedir}/libs/processor-1.0-SNAPSHOT-all.jar</file> <!-- path to where you put the jars -->
-                <generatePom>true</generatePom>
-            </configuration>
-            <executions>
                 <execution>
-                    <id>install-jar-lib</id>
+                    <id>install-processor</id>
                     <goals>
                         <goal>install-file</goal>
                     </goals>
                     <phase>validate</phase>
+                    <configuration>
+                        <groupId>de.andrena.converter</groupId>
+                        <artifactId>processor</artifactId>
+                        <version>0.1.0-SNAPSHOT</version>
+                        <packaging>jar</packaging>
+                        <file>${basedir}/libs/processor-0.1.0-SNAPSHOT-all.jar</file> <!-- path to where you put the jars -->
+                        <generatePom>true</generatePom>
+                    </configuration>
                 </execution>
             </executions>
         </plugin>
     </plugins>
 </build>
 ```
-
-You can then add a dependency on the annotations and add the annotation processor to the compile plugin:
+__Important:__ You need to `mvn install` now before you add the dependencies. The jars will be added to your local repository cache.\
+Then you can then add a normal dependency on the annotations and add the annotation processor to the compile plugin:
 ```
 <!-- in your pom.xml -->
 
