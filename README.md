@@ -55,7 +55,97 @@ dependencies {
 }
 ```
 ### With maven:
-maven-compile plugin -> annotation processor
+With maven, you have to install the jars locally before you can add them as dependencies. Add the following to your plugins, after you copied the jars 
+to your `libs/` directory:
+```
+<!-- in your pom.xml -->
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>2.5.1</version>
+            <configuration>
+                <groupId>de.andrena.converter</groupId>
+                <artifactId>annotation</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+                <packaging>jar</packaging>
+                <file>${basedir}/libs/annotation-0.1.0-SNAPSHOT.jar</file>  <!-- path to where you put the jars -->
+                <generatePom>true</generatePom>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>install-jar-lib</id>
+                    <goals>
+                        <goal>install-file</goal>
+                    </goals>
+                    <phase>validate</phase>
+                </execution>
+            </executions>
+        </plugin>
+        
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>2.5.1</version>
+            <configuration>
+                <groupId>de.andrena.converter</groupId>
+                <artifactId>processor</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+                <packaging>jar</packaging>
+                <file>${basedir}/libs/processor-1.0-SNAPSHOT-all.jar</file> <!-- path to where you put the jars -->
+                <generatePom>true</generatePom>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>install-jar-lib</id>
+                    <goals>
+                        <goal>install-file</goal>
+                    </goals>
+                    <phase>validate</phase>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
+
+You can then add a dependency on the annotations and add the annotation processor to the compile plugin:
+```
+<!-- in your pom.xml -->
+
+<dependencies>
+    <!-- other dependencies... -->
+    
+    <dependency>
+        <groupId>de.andrena.converter</groupId>
+        <artifactId>annotation</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.0</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>de.andrena.converter</groupId>
+                        <artifactId>processor</artifactId>
+                        <version>0.1.0-SNAPSHOT</version>
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+        </plugin>
+        <!-- ...other plugins -->
+
+```
 
 ## Usage:
 
@@ -89,8 +179,8 @@ __Important:__ \
 The code generation is based on the following assumptions:
 - Both classes have an empty default Constructor
 - Fields are either public or have an getter and setter following standard Java conventions `public void setName(String name)` and `public String getName()`
-- Fields have the same Name or a `@Mapping` Annotation (see section [Mapping](#mapping))
-- Fields have the same type or and `@ConversionAdapter` exists (see section [ConversionAdapters](#conversionadapters))
+- Fields have the same Name or a `@Mapping` Annotation (see [Mapping](#mapping))
+- Fields have the same type or and `@ConversionAdapter` exists (see [ConversionAdapters](#conversionadapters))
 - Fields that have no corresponding field in the target class are ignored.
 
 ### Converter Name
