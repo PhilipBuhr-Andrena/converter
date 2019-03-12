@@ -11,7 +11,7 @@ The Converter is not yet hosted on Maven Central. Therefore you need to build th
 and `processor-<version>-all.jar` yourself.\
 In a commandline: 
 ```
-$ git clone https://github.com/PhilipBuhr-Andrena/converter.git
+$ git clone https://github.com/philipbuhr-andrena/converter.git
 
 $ cd converter
 
@@ -247,4 +247,4 @@ in order to prevent them from being mapped if a corresponding field does exist.
 
 ## Feedback
 
-Thank you for using the Converter. Please leave feedback at https://github.com/PhilipBuhr-Andrena/converter
+Thank you for using the Converter. Please leave feedback at https://github.com/philipbuhr-andrena/converter
