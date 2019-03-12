@@ -49,8 +49,8 @@ Now you can add the dependencies:
 // in your build.gradle
 
 dependencies {
-    implementation name:'annotation-0.1.0-SNAPSHOT'
-    annotationProcessor name: 'processor-0.1.0-SNAPSHOT-all'
+    implementation name:'annotation-0.1.1-SNAPSHOT'
+    annotationProcessor name: 'processor-0.1.1-SNAPSHOT-all'
     // other dependencies
 }
 ```
@@ -76,9 +76,9 @@ to your `libs/` directory:
                     <configuration>
                         <groupId>de.andrena.converter</groupId>
                         <artifactId>annotation</artifactId>
-                        <version>0.1.0-SNAPSHOT</version>
+                        <version>0.1.1-SNAPSHOT</version>
                         <packaging>jar</packaging>
-                        <file>${basedir}/libs/annotation-0.1.0-SNAPSHOT.jar</file>  <!-- path to where you put the jars -->
+                        <file>${basedir}/libs/annotation-0.1.1-SNAPSHOT.jar</file>  <!-- path to where you put the jars -->
                         <generatePom>true</generatePom>
                     </configuration>
                 </execution>
@@ -91,9 +91,9 @@ to your `libs/` directory:
                     <configuration>
                         <groupId>de.andrena.converter</groupId>
                         <artifactId>processor</artifactId>
-                        <version>0.1.0-SNAPSHOT</version>
+                        <version>0.1.1-SNAPSHOT</version>
                         <packaging>jar</packaging>
-                        <file>${basedir}/libs/processor-0.1.0-SNAPSHOT-all.jar</file> <!-- path to where you put the jars -->
+                        <file>${basedir}/libs/processor-0.1.1-SNAPSHOT-all.jar</file> <!-- path to where you put the jars -->
                         <generatePom>true</generatePom>
                     </configuration>
                 </execution>
@@ -113,7 +113,7 @@ Then you can then add a normal dependency on the annotations and add the annotat
     <dependency>
         <groupId>de.andrena.converter</groupId>
         <artifactId>annotation</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.1.1-SNAPSHOT</version>
     </dependency>
 </dependencies>
 
@@ -130,7 +130,7 @@ Then you can then add a normal dependency on the annotations and add the annotat
                     <path>
                         <groupId>de.andrena.converter</groupId>
                         <artifactId>processor</artifactId>
-                        <version>0.1.0-SNAPSHOT</version>
+                        <version>0.1.1-SNAPSHOT</version>
                     </path>
                 </annotationProcessorPaths>
             </configuration>
