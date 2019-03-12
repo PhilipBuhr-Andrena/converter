@@ -3,7 +3,7 @@
  */
 
 rootProject.name = 'converter'
-gradle.ext.version = '0.1.0-SNAPSHOT'
+gradle.ext.version = '0.1.1-SNAPSHOT'
 gradle.ext.groupId = 'de.andrena.converter'
 
 include 'processor'
