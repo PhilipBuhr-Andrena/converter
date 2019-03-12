@@ -54,6 +54,17 @@ class ConversionMethodTest {
     }
 
     @Test
+    void handlesGenerics() {
+        when(toType.toString()).thenReturn("ToType<TypeParameter>");
+        when(fromType.toString()).thenReturn("FromType<TypeParameter>");
+
+        ConversionMethod conversionMethod = new ConversionMethod(methodElement);
+        assertThat(conversionMethod.hasCorrectSignature(toType, fromType)).isTrue();
+
+
+    }
+
+    @Test
     void returnsFullMethodName() {
         Name name = mock(Name.class);
         when(name.toString()).thenReturn("testMethod");

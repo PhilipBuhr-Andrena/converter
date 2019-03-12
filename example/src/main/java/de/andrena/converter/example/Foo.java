@@ -10,4 +10,11 @@ import de.andrena.annotation.Converter;
 public class Foo {
 
     public String name;
+
+    public Foo() {
+    }
+
+    public Foo(String name) {
+        this.name = name;
+    }
 }

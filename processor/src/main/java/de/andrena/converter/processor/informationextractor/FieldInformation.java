@@ -68,6 +68,8 @@ public class FieldInformation {
     }
 
     public boolean hasDifferentType(FieldInformation fromField) {
-        return !type.equals(fromField.getType());
+        String thisTypeString = type.toString();
+        String thatTypeString = fromField.getType().toString();
+        return !thisTypeString.equals(thatTypeString);
     }
 }

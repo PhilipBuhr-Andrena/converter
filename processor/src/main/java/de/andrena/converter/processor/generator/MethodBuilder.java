@@ -30,13 +30,12 @@ class MethodBuilder {
     MethodSpec generateConversionMethod(ClassInformation to, ClassInformation from, ConversionMethods conversionMethods) {
         MethodSpec.Builder builder = createStartOfMethod(to, from);
 
-        for (FieldInformation toField : to.getFields()) {
+        to.getFields().forEach(toField -> {
             Optional<FieldInformation> fromFieldOptional = from.findField(toField);
             fromFieldOptional
                     .map(fromField -> statementBuilder.mapField(toField, fromField, conversionMethods))
-                    .ifPresent(statement -> builder.addStatement(statement));
-
-        }
+                    .ifPresent(builder::addStatement);
+        });
 
         builder.addStatement("return result");
         builder.returns(to.getClassName());

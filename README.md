@@ -235,6 +235,7 @@ public static LocalDate myStringToLocalDateConverterMethod(String date) {
 
 __Important__
 - The methods need to be `public` and `static`
+- The method must accept exactly one parameter. Currently this is not verified by the processor
 - They can be located anywhere, recommended is a ConfigurationClass
 - The name is irrelevant, the correct method is identified by its signature
 - As of now, each signature may only exist once. Otherwise a DuplicateMappingNameException is raised during Compile.

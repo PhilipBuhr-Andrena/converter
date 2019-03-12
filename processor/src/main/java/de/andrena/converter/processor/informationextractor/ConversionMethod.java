@@ -21,8 +21,10 @@ class ConversionMethod {
     }
 
     boolean hasCorrectSignature(TypeMirror toType, TypeMirror fromType) {
-        TypeMirror returnType = methodElement.getReturnType();
-        TypeMirror parameterType = methodElement.getParameters().get(0).asType();
-        return toType.equals(returnType) && fromType.equals(parameterType);
+        String returnType = methodElement.getReturnType().toString();
+        String parameterType = methodElement.getParameters().get(0).asType().toString();
+        String toTypeString = toType.toString();
+        String fromTypeString = fromType.toString();
+        return toTypeString.equals(returnType) && fromTypeString.equals(parameterType);
     }
 }

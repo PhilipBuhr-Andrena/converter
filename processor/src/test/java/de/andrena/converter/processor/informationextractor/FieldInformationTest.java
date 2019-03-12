@@ -10,6 +10,7 @@ import javax.lang.model.type.TypeMirror;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FieldInformationTest {
 
@@ -87,11 +88,26 @@ class FieldInformationTest {
     @Test
     void haveSameType() {
         TypeMirror type = mock(TypeMirror.class);
+        when(type.toString()).thenReturn("type");
         FieldInformation first = new FieldInformation(NAME, type, true);
         FieldInformation second = new FieldInformation(NAME, type, true);
 
         assertThat(first.hasDifferentType(second)).isFalse();
         assertThat(second.hasDifferentType(first)).isFalse();
 
+    }
+
+    @Test
+    void collectionsHaveSameType() {
+        TypeMirror listOfStrings1 = mock(TypeMirror.class);
+        TypeMirror listOfStrings2 = mock(TypeMirror.class);
+        when(listOfStrings1.toString()).thenReturn("java.util.List<java.lang.String>");
+        when(listOfStrings2.toString()).thenReturn("java.util.List<java.lang.String>");
+
+        FieldInformation first = new FieldInformation(NAME, listOfStrings1, true);
+        FieldInformation second = new FieldInformation(NAME, listOfStrings2, true);
+
+        assertThat(first.hasDifferentType(second)).isFalse();
+        assertThat(second.hasDifferentType(first)).isFalse();
     }
 }
